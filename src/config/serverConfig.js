@@ -7,7 +7,7 @@ module.exports = {
   RABBITMQ_URL: process.env.RABBITMQ_URL || "amqp://localhost:5672",
   EXCHANGE_NAME: process.env.EXCHANGE_NAME || "ecommerce_events",
   DLX_EXCHANGE_NAME: process.env.DLX_EXCHANGE_NAME || "ecommerce_dlx",
-  JWT_SECRET: process.env.SECRET_TOKEN || process.env.JWT_SECRET || "krishukumar@2814",
+  JWT_SECRET: process.env.SECRET_TOKEN || process.env.JWT_SECRET || "ecommerce_jwt_secret_dev_key",
   NODE_ENV: process.env.NODE_ENV || "development",
   SMTP_HOST: process.env.SMTP_HOST || "smtp.ethereal.email",
   SMTP_PORT: process.env.SMTP_PORT || 587,

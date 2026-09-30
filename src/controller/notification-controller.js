@@ -1,20 +1,16 @@
 const NotificationService = require("../service/notification-service");
+const { UnauthorizedError, NotFoundError } = require("../utils/errors/app-error");
 
 class NotificationController {
   constructor() {
     this.notificationService = new NotificationService();
   }
 
-  async getMyNotifications(req, res) {
+  async getMyNotifications(req, res, next) {
     try {
       const userId = req.user?.id || req.user?.userId;
       if (!userId) {
-        return res.status(401).json({
-          success: false,
-          data: [],
-          message: "User ID not found in token",
-          error: "Unauthorized",
-        });
+        return next(new UnauthorizedError("User ID not found in token"));
       }
 
       const notifications = await this.notificationService.getUserNotifications(userId);
@@ -26,27 +22,17 @@ class NotificationController {
         error: {},
       });
     } catch (error) {
-      return res.status(500).json({
-        success: false,
-        data: [],
-        message: "Failed to fetch notifications",
-        error: error.message,
-      });
+      return next(error);
     }
   }
 
-  async getNotificationById(req, res) {
+  async getNotificationById(req, res, next) {
     try {
       const { id } = req.params;
       const notification = await this.notificationService.getNotificationById(id);
 
       if (!notification) {
-        return res.status(404).json({
-          success: false,
-          data: {},
-          message: "Notification not found",
-          error: "Not Found",
-        });
+        return next(new NotFoundError("Notification not found"));
       }
 
       return res.status(200).json({
@@ -56,12 +42,7 @@ class NotificationController {
         error: {},
       });
     } catch (error) {
-      return res.status(500).json({
-        success: false,
-        data: {},
-        message: "Failed to fetch notification",
-        error: error.message,
-      });
+      return next(error);
     }
   }
 }
